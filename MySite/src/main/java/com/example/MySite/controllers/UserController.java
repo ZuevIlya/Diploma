@@ -32,15 +32,25 @@ public class UserController {
     public String getProfile(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("secondName", user.getSecondName());
+        model.addAttribute("country", user.getCountry());
+        model.addAttribute("age", user.getAge());
 
         return "profile";
     }
 
 
     @PostMapping("/user/profile")
-    public String updateProfile(@AuthenticationPrincipal User user, @RequestParam String password, @RequestParam String email) {
+    public String updateProfile(@AuthenticationPrincipal User user,
+                                @RequestParam String password,
+                                @RequestParam String email,
+                                @RequestParam String name,
+                                @RequestParam String secondName,
+                                @RequestParam String country,
+                                @RequestParam int age) {
 
-        userService.updateProfile(user, password, email);
+        userService.updateProfile(user, password, email, name, secondName, country, age);
 
         return "redirect:/user/profile";
     }

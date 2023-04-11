@@ -64,21 +64,47 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void updateProfile(User user, String password, String email) {
+    public void updateProfile(User user, String password, String email, String name, String secondName, String country, int age) {
+
+        // Достаём старые данные
         String userEmail = user.getEmail();
+        String userName = user.getName();
+        String userSecondName = user.getSecondName();
+        String userCountry = user.getCountry();
+        int userAge = user.getAge();
 
-        boolean isEmailChanged = (email != null && !email.equals(userEmail)) || (userEmail != null && !userEmail.equals(email));
 
+
+        // Проверка на изменение данных
+        // boolean isEmailChanged = (email != null && !email.equals(userEmail)) || (userEmail != null && !userEmail.equals(email));
+        boolean isEmailChanged = (email != null && !email.equals(userEmail));
         if (isEmailChanged) {
             user.setEmail(email);
         }
 
-        if (StringUtils.isNotBlank(email)) {
-            user.setActivationCode(UUID.randomUUID().toString());
+        boolean isNameChanged = (name != null && !name.equals(userName));
+        if (isNameChanged) {
+            user.setName(name);
         }
 
-        System.out.println(email);
-        System.out.println(user.getActivationCode());
+        boolean isSecondNameChanged = (secondName != null && !secondName.equals(userSecondName));
+        if (isSecondNameChanged) {
+            user.setSecondName(secondName);
+        }
+
+        boolean isCountryChanged = (country != null && !country.equals(userCountry));
+        if (isCountryChanged) {
+            user.setCountry(country);
+        }
+
+        boolean isAgeChanged = (age != 0 && age != userAge);
+        if (isAgeChanged) {
+            user.setAge(age);
+        }
+
+        if ((StringUtils.isNotBlank(email)) && isEmailChanged) {
+            user.setActivationCode(UUID.randomUUID().toString());
+        }
 
         if (StringUtils.isNotBlank(password)) {
             user.setPassword(password);
@@ -98,7 +124,6 @@ public class UserService implements UserDetailsService {
                     user.getUsername(),
                     user.getActivationCode()
             );
-
             smtpMailSender.send(user.getEmail(), "Activation code", message);
         }
     }
