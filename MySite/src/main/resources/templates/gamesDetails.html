@@ -19,8 +19,9 @@
     <p th:text="'Автор: ' + ${element.authorName}"/>
     <a th:href="'/gameInfo/' + ${element.id} + '/edit'" class="btn btn-warning">Редактировать</a><br><br>
     <form th:action="'/gameInfo/' + ${element.id} + '/remove'" method="post">
-      <button class="btn btn-warning" type="submit">Удалить</button>
+      <button class="btn btn-warning" type="submit">Удалить</button><br><br>
     </form>
+    <a th:href="'/events/' + ${element.id}" class="btn btn-warning">Перейти к турнирам</a>
   </div>
 </div>
 
