@@ -10,20 +10,22 @@
 <header th:insert="blocks/header :: header"></header>
 
 <div class="container mt-5">
-  <a class="nav-link px-2 link-dark" href="/games/add"><b>Создать новый турнир</b></a>
+  <a class="nav-link px-2 link-dark" th:href="'/events/' + ${idGame} + '/add'"><b>Создать новый турнир</b></a>
   <h1>Список турниров по выбранной игре</h1>
   <div th:each="element : ${events}" class="alert alert-info mt-2">
     <h3 th:text="'Название: ' + ${element.name}"/>
     <p th:text="'Организаторы: ' + ${element.organizer}"/>
     <p th:text="'Подробное описание: ' + ${element.description}"/>
-    <p th:Calendar="'Дата и время: '+ ${element.calendar}"/>
+    <p th:text="${element.calendar}"/>
     <p th:text="'Количество команд: ' + ${element.teams}"/>
     <p th:text="'Количество игроков в команде: ' + ${element.count}"/>
     <p th:text="'Логин создателя: ' + ${element.authorName}"/>
     <p th:text="'Название игры: ' + ${element.gameName}"/>
-
-    <a th:href="'/gameInfo/' + ${element.id}" class="btn btn-warning">Детальнее</a>
+    <form th:action="'/events/' + ${element.id} + '/registration'" method="post">
+      <button class="btn btn-warning" type="submit">Зарегистрироваться на турнир</button><br><br>
+    </form>
   </div>
+
 </div>
 
 </body>

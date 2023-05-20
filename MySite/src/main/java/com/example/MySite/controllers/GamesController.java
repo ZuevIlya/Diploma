@@ -3,20 +3,23 @@ package com.example.MySite.controllers;
 import com.example.MySite.models.Games;
 import com.example.MySite.models.User;
 import com.example.MySite.repositories.GamesRepository;
-import com.example.MySite.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.persistence.Id;
+import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 // @PreAuthorize("hasAuthority('ADMIN')")
 @Controller
@@ -24,8 +27,6 @@ public class GamesController {
 
     @Autowired // Создание переменной, которая ссылается на репозиторий
     private GamesRepository gamesRepository;
-
-
 
 
 
@@ -42,10 +43,20 @@ public class GamesController {
     }
 
     @PostMapping("/games/add")
-    public String gamesPostAdd(@AuthenticationPrincipal User user, @RequestParam String name, @RequestParam String developer, @RequestParam int teamwork, Model model) {
-        Games game = new Games(name, developer, teamwork, user);
-        gamesRepository.save(game);
-        return "redirect:/games"; // redirect - переадресация
+    public String gamesPostAdd(@AuthenticationPrincipal User user,
+                               @Valid Games game,
+                               BindingResult bindingResult, // Список аргументов и сообщений ошибок валидации
+                               Map<String, Object> model) {
+        game.setAuthor(user);
+        if (bindingResult.hasErrors()) { // Проверка на ошибки
+            Map<String, String> errorsMap = UtilsController.getErrors(bindingResult);
+            model.put("nameError", errorsMap.get("nameError:"));
+            model.put("developerError", errorsMap.get("developerError:"));
+            return "gamesAdd";
+        } else {
+            gamesRepository.save(game);
+            return "redirect:/games"; // redirect - переадресация
+        }
     }
 
     @GetMapping("/gameInfo/{id}")
@@ -73,19 +84,34 @@ public class GamesController {
     }
 
     @PostMapping("/gameInfo/{id}/edit")
-    public String gamesPostEdit(@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String developer, @RequestParam int teamwork, Model model) {
+    public String gamesPostEdit(@PathVariable(value = "id") long id,
+                                @AuthenticationPrincipal User user,
+                                @RequestParam String name,
+                                @RequestParam String developer,
+                                @RequestParam int teamwork,
+                                @Valid Games game,
+                                BindingResult bindingResult,
+                                Map<String, Object> model) {
 
-        Games game = gamesRepository.findById(id).orElseThrow();
-        game.setName(name);
-        game.setDeveloper(developer);
-        if (teamwork == 1){
-            game.setTeamwork(true);
+        if (bindingResult.hasErrors()) { // Проверка на ошибки
+            Map<String, String> errorsMap = UtilsController.getErrors(bindingResult);
+            model.put("nameError", errorsMap.get("nameError:"));
+            model.put("developerError", errorsMap.get("developerError:"));
+            model.put("id", id);
+            model.put("gameDetails", game);
+            return "gamesEdit";
+        } else {
+            game.setName(name);
+            game.setDeveloper(developer);
+            game.setAuthor(user);
+            if (teamwork == 1){
+                game.setTeamwork(true);
+            } else {
+                game.setTeamwork(false);
+            }
+            gamesRepository.save(game);
+            return "redirect:/games"; // redirect - переадресация
         }
-        else {
-            game.setTeamwork(false);
-        }
-        gamesRepository.save(game);
-        return "redirect:/games"; // redirect - переадресация
     }
 
     @PostMapping("/gameInfo/{id}/remove")

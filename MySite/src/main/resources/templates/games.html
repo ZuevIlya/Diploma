@@ -11,11 +11,11 @@
 
 <div class="container mt-5">
     <a class="nav-link px-2 link-dark" href="/games/add"><b>Добавить игру</b></a>
-    <h1>Список всех игр</h1>
+    <h1>Список всех дисциплин</h1>
     <div th:each="element : ${gamesElements}" class="alert alert-info mt-2">
         <h3 th:text="${element.name}"/>
         <p th:text="${element.developer}"/>
-        <p th:text="'Командая игра: ' + ${element.teamwork}"/>
+        <p th:text="'Командная игра: ' + ${element.teamwork}"/>
         <p th:text="'Автор: ' + ${element.authorName}"/>
         <a th:href="'/gameInfo/' + ${element.id}" class="btn btn-warning">Детальнее</a>
     </div>

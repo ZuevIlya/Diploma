@@ -1,7 +1,7 @@
 package com.example.MySite.controllers;
 
+import com.example.MySite.models.Events;
 import com.example.MySite.models.User;
-import com.example.MySite.repositories.UserRepository;
 import com.example.MySite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Map;
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
+import javax.transaction.Transactional;
 
 @Controller
+@Transactional
 public class UserController {
 
     @Autowired
@@ -55,5 +58,14 @@ public class UserController {
         return "redirect:/user/profile";
     }
 
+    @GetMapping("/user/eventslist")
+    @ElementCollection(fetch = FetchType.EAGER)
+    public String eventsList(Model model, @AuthenticationPrincipal User user) {
 
+        Iterable<Events> events = user.getTournaments();
+
+        model.addAttribute("events", user.getTournaments());
+
+        return "userEvents";
+    }
 }

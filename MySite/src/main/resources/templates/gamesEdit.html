@@ -10,16 +10,20 @@
 <header th:insert="blocks/header :: header"></header>
 
 <div class="container mt-5">
-  <h1>Редактирование игры</h1>
-  <div th:each="element : ${gameDetails}">
-    <form method="post">
-      <input type="text" th:value="${element.name}" name="name" placeholder="Название игры" class="form-control"><br>
-      <input type="text" th:value="${element.developer}" name="developer" placeholder="Разработчик" class="form-control"><br>
-      <p><input name="teamwork" type="radio" value="1" checked>Командная игра</p>
-      <p><input name="teamwork" type="radio" value="0">Одиночная игра</p>
-      <button type="submit" class="btn btn-success">Сохранить</button>
-    </form>
-  </div>
+  <h1>Редактирование дисциплины</h1>
+  <div th:text = "${nameError}" style="color:red"/>
+  <div th:text = "${developerError}" style="color:red"/>
+        <form method="post">
+        <div th:each="element : ${gameDetails}">
+            <input type="text" th:value="${element.name}" name="name" placeholder="Название игры" class="form-control"><br>
+            <input type="text" th:value="${element.developer}" name="developer" placeholder="Разработчик" class="form-control"><br>
+            <p><input name="teamwork" type="radio" value="1" checked>Командная игра</p>
+            <p><input name="teamwork" type="radio" value="0">Одиночная игра</p>
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        </div>
+        </form>
+
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 package com.example.MySite.service;
 
+import com.example.MySite.models.Events;
 import com.example.MySite.models.Role;
 import com.example.MySite.models.User;
 import com.example.MySite.repositories.UserRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -21,6 +23,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private SmtpMailSender smtpMailSender;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,11 +43,12 @@ public class UserService implements UserDetailsService {
         user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Пароль зашифрован при регистрации
         userRepository.save(user);
 
         if (StringUtils.isNotBlank(user.getEmail())) {
             String message = String.format(
-                    "Hello, %s! \n" + "Welcome to mySite. Please, visit next link: http://localhost:8080/activate/%s",
+                    "Здравствуй, %s! \n" + "Добро пожаловать на AllTournaments! Пожалуйста, перейди по ссылке для завершения регистрации: http://localhost:8080/activate/%s",
                     user.getUsername(),
                     user.getActivationCode()
             );
@@ -107,7 +113,7 @@ public class UserService implements UserDetailsService {
         }
 
         if (StringUtils.isNotBlank(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password)); // Для шифрования нового пароля
         }
 
         userRepository.save(user);
@@ -130,5 +136,11 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public void registration(User user, Events event) {
+        user.getTournaments().add(event);
+        userRepository.save(user);
+
     }
 }

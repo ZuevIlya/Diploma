@@ -1,12 +1,17 @@
 package com.example.MySite.models;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity // Означает что это модель (models)
 public class Games {
     @Id // Уникальный идентификатор
     @GeneratedValue(strategy = GenerationType.AUTO) // При добавлении новой записи случайно генерирует новый id
     private Long id;
+    @NotBlank(message = "Пожалуйста, заполните поле!")
+    @Length(max = 15, message = "Превышено допустимое количество символов!")
     private String name, developer;
     private boolean teamwork;
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,21 +1,31 @@
-<div th:fragment="header">
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml"  style="background-color:#C0C0C0">
   <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
       <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+        <div overflow="auto" float="left">
+          <h4><img src="https://cdn-icons-png.flaticon.com/512/1253/1253739.png?w=1380&t=st=1684572636~exp=1684573236~hmac=4d54ea7106e4dfac231f7cbcfb6072c1945f83c44a939441f01d82a2b5472c9c"
+                        width="50px" height="50px" float="left" alt="logo">
+            AllTournaments </h4>
+        </div>
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
       </a>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a class="nav-link px-2 link-secondary" href="/">Главная страница</a></li>
+        <li><a class="nav-link px-2 link-dark" href="/">Главная страница</a></li>
         <li><a class="nav-link px-2 link-dark" href="/user/profile">Профиль</a></li>
         <li><a class="nav-link px-2 link-dark" href="/about">О нас</a></li>
-        <li><a class="nav-link px-2 link-dark" href="/games">Список игр</a></li>
+        <li><a class="nav-link px-2 link-dark" href="/games">Список дисциплин</a></li>
+        <li><a class="nav-link px-2 link-dark" href="/user/eventslist">Список моих турниров</a></li>
+        <li>
+          <a class="nav-link px-2 link-dark">
+          <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Выйти из учётной записи"/>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+          </form>
+          </a>
+        </li>
       </ul>
 
-      <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
-      </div>
     </header>
   </div>
 </div>
