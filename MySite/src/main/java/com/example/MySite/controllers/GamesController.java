@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +17,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 // @PreAuthorize("hasAuthority('ADMIN')")
 @Controller
@@ -27,8 +24,6 @@ public class GamesController {
 
     @Autowired // Создание переменной, которая ссылается на репозиторий
     private GamesRepository gamesRepository;
-
-
 
     @GetMapping("/games")
     public String games(Model model) {

@@ -28,6 +28,7 @@ public class RegistrationController {
     public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
         if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
             model.addAttribute("passwordDifferenceError", "Пароли не совпадают!");
+            return "registration";
         }
 
         if (bindingResult.hasErrors()) {

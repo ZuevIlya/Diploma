@@ -60,7 +60,6 @@ public class UserService implements UserDetailsService {
 
     public boolean activateUser(String code) {
         User user = userRepository.findByActivationCode(code);
-
         if (user == null) {
             return false;
         }
@@ -78,8 +77,6 @@ public class UserService implements UserDetailsService {
         String userSecondName = user.getSecondName();
         String userCountry = user.getCountry();
         int userAge = user.getAge();
-
-
 
         // Проверка на изменение данных
         // boolean isEmailChanged = (email != null && !email.equals(userEmail)) || (userEmail != null && !userEmail.equals(email));
@@ -117,7 +114,6 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(user);
-
         if (isEmailChanged) {
             sendMessage(user);
         }
@@ -141,6 +137,5 @@ public class UserService implements UserDetailsService {
     public void registration(User user, Events event) {
         user.getTournaments().add(event);
         userRepository.save(user);
-
     }
 }

@@ -10,7 +10,7 @@
 <header th:insert="blocks/header :: header"></header>
 
 <div class="container mt-5">
-    <a class="nav-link px-2 link-dark" href="/games/add"><b>Добавить игру</b></a>
+    <a class="nav-link px-2 link-dark" href="/games/add"><b>Добавить дисциплину</b></a>
     <h1>Список всех дисциплин</h1>
     <div th:each="element : ${gamesElements}" class="alert alert-info mt-2">
         <h3 th:text="${element.name}"/>

@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,7 +32,6 @@ public class User implements UserDetails {
     private String password2;
     private boolean active;
 
-
     @NotBlank(message = "Пожалуйста, заполните поле!")
     @Email(message = "Не корректный почтовый адрес")
     private String email;
@@ -48,7 +46,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_inTournaments",
@@ -56,7 +53,6 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "tournament_id") }
     )
    private Set<Events> tournaments = new HashSet<>();
-
 
     public String getEmail() {
         return email;
@@ -187,6 +183,5 @@ public class User implements UserDetails {
     public void setPassword2(String password2) {
         this.password2 = password2;
     }
-
 
 }

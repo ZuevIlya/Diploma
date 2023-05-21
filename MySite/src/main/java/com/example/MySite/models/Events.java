@@ -18,7 +18,7 @@ public class Events {
     private Long id;
 
     @NotBlank(message = "Пожалуйста, заполните поле!")
-    @Length(max = 15, message = "Превышено допустимое количество символов!")
+    @Length(max = 30, message = "Превышено допустимое количество символов!")
     private String name, organizer;
     @NotBlank(message = "Пожалуйста, заполните поле!")
     @Length(max = 1024, message = "Превышено допустимое количество символов!")
